@@ -1,0 +1,555 @@
+#include "game.h"
+#include "util.h"
+using namespace std;
+//x = 128
+
+
+
+void titleDraw() {
+	//gotoxy(0, 0);
+	cout << endl << endl << endl << endl;
+	cout << "               ■■■■■■                ■■■■   ■" << endl;
+	cout << "               ■        ■                ■         ■" << endl;
+	cout << "               ■■■■■■       ■       ■         ■      ■■■■■  ■  ■  ■■■■    ■  ■■■■  ■    ■          " << endl;
+	cout << "      ---           ■          ■  ■     ■■■■ ■■      ■  ■      ■  ■        ■  ■■        ■  ■    ■        --" << endl;
+	cout << "      |        ■■■■■■   ■      ■   ■         ■      ■  ■      ■  ■  ■■■■    ■  ■■■■  ■■  ■         |" << endl;
+	cout << "      |        ■                          ■         ■      ■  ■      ■■■  ■        ■■  ■        ■               |" << endl;
+	cout << "      |        ■■■■■■  ■■■■■■  ■■■■   ■  를  ■■■■■  ■  ■  ■■■■    ■  ■■■■  ■    ■         |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                       w, s키로 조작                  |" << endl;
+	cout << "      |                                                                                       space키로 선택                 |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+
+}
+
+void infoDraw() {
+	system("cls");
+	cout << endl << endl << endl << endl << endl << endl << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "      |                                                     [조작 방법]                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                        이 게임은 몰려오는 몬스터를 때려 처치해야 합니다.                                             |" << endl;
+	cout << "      |                        몬스터는 총 4종류가 나옵니다.                                                                 |" << endl;
+	cout << "      |                        몬스터 마다 각각 맞춰야 하는 키가 다릅니다.                                                   |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                        1.                          2.                                                                |" << endl;
+	cout << "      |                                          -- ↑키                    -- ↓키                                          |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                       3.                           4.                                                                |" << endl;
+	cout << "      |                                          -- ←키                    -- →키                                          |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                 > 스페이스 바를 누르면 다음 장으로 넘어갑니다 <      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+	
+	setColor(cyan, black);
+	gotoxy(38, 15);
+	cout <<"＠";
+	gotoxy(38, 16);
+	cout << "◁";
+
+	setColor(red, black);
+	gotoxy(67, 15);
+	cout << "☆";
+	gotoxy(67, 16);
+	cout << "▶";
+
+	setColor(lightpurple, black);
+	gotoxy(38, 18);
+	cout << "◎";
+	gotoxy(38, 19);
+	cout << "■";
+
+	setColor(lightgreen, black);
+	gotoxy(67, 18);
+	cout << "△";
+	gotoxy(67, 19);
+	cout << "■";
+	setColor(white, black);
+
+	while (1) {
+		if (keyControl() == SUBMIT) {
+			infoDraw2();
+			break;
+
+		}
+	}
+}
+
+void infoDraw2() {
+	system("cls");
+	cout << endl << endl << endl << endl << endl << endl << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "      |                                                     [조작 방법]                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                        플레이어는 총을 쏘아 죽여야 합니다.                                                           |" << endl;
+	cout << "      |                        방향키 w s 키를 이용해 위 아래로 움직일 수 있습니다.                                          |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                        게이지는 남은 총알 수를 보여줍니다.                                                           |" << endl;
+	cout << "      |                        [=====]                                                                                       |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                       일정 점수를 획득하면 다음 스테이지로 넘어갑니다.                                               |" << endl;
+	cout << "      |                       스테이지가 올라갈 수록 몬스터는 더 단단해집니다.                                               |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                 > 스페이스 바를 누르면 메인 화면으로 넘어갑니다 <    |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+	gotoxy(30, 13);
+	cout << "-플레이어-" ;
+	setColor(cyan, black);
+	gotoxy(34, 14);
+	cout << "○";
+	gotoxy(34, 15);
+	cout << "▲";
+	setColor(white, black);
+	while (1) {
+		if (keyControl() == SUBMIT) {
+			break;
+		}
+	}
+
+}
+
+int menuDraw() {
+	int x = 57;
+	int y = 15;
+	gotoxy(x - 2, y);
+	cout << "> 게 임 시 작" << endl;
+	gotoxy(x, y + 1);
+	cout << "게 임 조 작" << endl;
+	gotoxy(x, y + 2);
+	cout << "   종 료   " << endl;
+	while (1) {
+		int n = keyControl();
+		switch (n) {
+		case UP: {
+			if (y > 15) {
+				gotoxy(x - 2, y);
+				cout << " ";
+				gotoxy(x - 2, --y);
+				cout << ">";
+			}
+			break;
+		}
+
+		case DOWN: {
+			if (y < 17) {
+				gotoxy(x - 2, y);
+				cout << " ";
+				gotoxy(x - 2, ++y);
+				cout << ">";
+			}
+			break;
+		}
+
+		case SUBMIT: {
+			return y - 15;
+		}
+		}
+	}
+}
+
+int keyControl() {
+
+	if (!_kbhit()) return -1;
+
+	int temp = _getch();
+	if (temp == 87 || temp == 119) {
+		return UP;
+	}
+	else if (temp == 65 || temp == 97) {
+		return LEFT;
+	}
+	else if (temp == 83 || temp == 115) {
+		return DOWN;
+	}
+	else if (temp == 68 || temp == 100) {
+		return RIGHT;
+	}
+	else if (temp == 32) {
+		return SUBMIT;
+	}
+	else if (temp == 72) { // 위
+		return 5;
+	}
+	else if (temp == 80) { // 아래
+		return 6;
+	}
+	else if (temp == 75) { // 왼쪽
+		return 7;
+	}
+	else if (temp == 77) { // 오른쪽
+		return 8;
+	}
+
+}
+
+
+char tempMap[18][199];
+
+char map[18][199] = {
+	{"211111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"200001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001" },
+	{"20s010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010" },
+	{"20d010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010" },
+	{"211111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111" }
+};
+void drawMap(int* x, int* y) {
+	system("cls");
+	int h, w;
+	cout << endl << endl << endl << endl << endl << endl;
+	for (h = 0; h < 18; h++) {
+		for (w = 0; w < 199; w++) {
+			char temp = tempMap[h][w];
+			if (temp == '0') {
+				setColor(black, black);
+				printf(" ");
+			}
+			else if (temp == '1') {
+				setColor(white, white);
+				printf("@");
+
+			}
+			else if (temp == '2') {
+				setColor(black, black);
+				printf("          ");
+				setColor(white, white);
+				printf("@");
+			}
+			else if (temp == 's') {
+				*x = w + 10;
+				*y = h + 6;
+				setColor(cyan, black);
+				printf("○");
+			}
+			else if (temp == 'd') {
+				setColor(cyan, black);
+				printf("▲");
+			}
+		}
+		printf("\n");
+	}
+	setColor(white, black);
+	//Sleep(3000);
+}
+
+void move(int* x, int* y, int _x, int _y) {
+
+	if (*y + _y != 6 && *y + _y != 22) {
+		setColor(white, black);
+		gotoxy(*x, *y);
+		printf("  ");
+		gotoxy(*x, *y + 1);
+		printf("  ");
+
+		setColor(cyan, black);
+		gotoxy(*x + _x, *y + _y);
+		printf("○");
+
+		setColor(cyan, black);
+		gotoxy(*x + _x, *y + _y + 1);
+		printf("▲");
+		*x += _x;
+		*y += _y;
+	}
+
+}
+
+class Shot {
+public:
+	int X; // 가로
+	int Y; // 세로 
+	int i; // 이동 위치 변경
+	int cnt; // 총알 발사 여부
+	int color; // 총알 종류(색깔)
+	DWORD startTime;
+	Shot() {
+		X = 0;
+		Y = 0;
+		cnt = 0;
+		i = 0;
+		startTime = GetTickCount();
+		color = 0;
+	}
+
+
+};
+
+class Monster {
+public:
+	char m[3];
+	char s[3]; // 몬스터 그림
+	int X, Y; // 몬스터 위치
+	int i = 0; // 이동 변경
+	int cnt = 0; // 생존 여부
+	int color = 0; // 몬스터 종류(색깔)
+	DWORD M_startTime;
+	Monster() {
+		X = 127;
+		Y = 0;
+		M_startTime = GetTickCount();
+	}
+
+	void print() {
+		setColor(white, black);
+		gotoxy(X - i, Y);
+		cout << "  ";
+		gotoxy(X - i, Y + 1);
+		cout << "  ";
+		i++;
+		if(color == 1) setColor(cyan, black);
+		else if(color == 2) setColor(red, black);
+		else if (color == 3) setColor(lightpurple, black);
+		else if (color == 4) setColor(lightgreen, black);
+		gotoxy(X - i, Y);
+		cout << m;
+		gotoxy(X - i, Y + 1);
+		cout << s;
+		setColor(white, black);
+	}
+};
+Shot shot[5];
+Monster mons[10];
+
+void gLoop() {
+	srand((unsigned int)time(NULL));
+	int x, y;
+	int playing = 1;
+	int M_CreateTime = 2000;
+	memcpy(tempMap, map, sizeof(tempMap));
+
+	drawMap(&x, &y);
+	int j = 0; // 몬스터 개수
+	int k = 0; // 몬스터 움직임
+	int rand2 = 1; // 몬스터 위치 랜덤 
+	int shot_bar = 0;
+	int score = 0;
+	while (playing) {
+		drawUI(&x, &y);
+		for (int i = 0; i < 5; i++) {
+			if (shot[i].cnt == 1) shot_bar++;
+		}
+		gotoxy(90, 4);
+		switch (shot_bar) {
+			case 0: 
+				cout << "총알 : [=====]"; break;
+			case 1:
+				cout << "총알 : [==== ]"; break;
+			case 2:
+				cout << "총알 : [===  ]"; break;
+			case 3:
+				cout << "총알 : [==   ]"; break;
+			case 4:
+				cout << "총알 : [=    ]"; break;
+			case 5:
+				cout << "총알 : [     ]"; break;
+		}
+		shot_bar = 0;
+		gotoxy(40, 4);
+		cout << "점수 : " << score;
+		for (int i = 0; i < 5; i++) { // 총알 움직임 구현
+			if (shot[i].cnt == 1) {
+				DWORD currentTime = GetTickCount();
+
+				if (currentTime - shot[i].startTime >= 10) {
+					shot[i].i++;
+					gotoxy(shot[i].X + shot[i].i - 1, shot[i].Y);
+					setColor(white, black);
+					printf(" ");
+					gotoxy(shot[i].X + shot[i].i, shot[i].Y);
+					switch (shot[i].color)
+					{
+					case 1: setColor(cyan, black); break;
+					case 2: setColor(red, black); break;
+					case 3: setColor(lightpurple, black); break;
+					case 4: setColor(lightgreen, black); break;
+					}
+
+					printf("*");
+					setColor(white, black);
+					shot[i].startTime = GetTickCount();
+					if (shot[i].X + shot[i].i == 127) {
+						gotoxy(shot[i].X + shot[i].i, shot[i].Y);
+						setColor(white, black);
+						printf(" ");
+						shot[i].cnt = 0;
+					}
+					for (int j = 0; j < k; j++) { // 몬스터와 충동 시 삭제
+						if (mons[j].cnt == 0) continue;
+						if (shot[i].X + shot[i].i == mons[j].X - mons[j].i && shot[i].color==mons[j].color) {
+							if (shot[i].Y== mons[j].Y || shot[i].Y == mons[j].Y+1) {
+								shot[i].cnt = 0;
+								mons[j].cnt = 0;
+								
+								setColor(white, black);
+								gotoxy(mons[j].X - mons[j].i, mons[j].Y);
+								printf("  ");
+								gotoxy(mons[j].X - mons[j].i, mons[j].Y + 1);
+								printf("  ");
+								mons[j].i = 0;
+								score++;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		int key = keyControl();
+		switch (key) {
+		case UP:
+			move(&x, &y, 0, -1);
+			break;
+		case DOWN:
+			move(&x, &y, 0, 1);
+			break;
+		case SUBMIT:
+			playing = 0;
+			break;
+		default: 
+			if (key != 5 && key != 6 && key != 7 && key != 8) break; // 총 생성 
+			for (int i = 0; i < 5; i++) {
+				if (shot[i].cnt == 0) {
+					shot[i].startTime = GetTickCount();
+					shot[i].i = 4;
+					shot[i].X = x;
+					shot[i].Y = y;
+					gotoxy(shot[i].X + shot[i].i, shot[i].Y);
+					if (key == 5) {
+						setColor(cyan, black);
+						shot[i].color = 1;
+					}
+					else if (key == 6) {
+						setColor(red, black);
+						shot[i].color = 2;
+					}
+					else if (key == 7) {
+						setColor(lightpurple, black);
+						shot[i].color = 3;
+					}
+					else if (key == 8) {
+						setColor(lightgreen, black);
+						shot[i].color = 4;
+					}
+					printf("*");
+					setColor(white, black);
+					shot[i].cnt = 1;
+					break;
+				}
+			}
+			break;
+		}
+		DWORD M_currentTime = GetTickCount();
+		for (int i = 0; i < k; i++) { // 게임 오버
+			if (mons[i].cnt != 0) {
+				if (M_currentTime - mons[i].M_startTime >= 100) {
+					mons[i].print();
+					mons[i].M_startTime = GetTickCount();
+					if (mons[i].X - mons[i].i == 15) {
+						mons[i].cnt = 0;
+						cout << "종료합니다" << mons[i].X << "  " << mons[i].i;
+						Sleep(3000);
+						for (int cc = 0; cc < 20; cc++) {
+							mons[cc].cnt = 0;
+							mons[cc].i = 0;
+						}
+						playing = 0;
+						break;
+					}
+				}
+			}
+		}
+
+		if (M_currentTime - mons[k].M_startTime >= M_CreateTime) { // 몬스터 생성
+			if (k != 10) {
+				mons[k].cnt = 1;
+				int rand1 = rand() % 4 + 1;
+				switch (rand1) {
+				case 1:
+					mons[k].color = 1;
+					strcpy_s(mons[k].m, "@");
+					strcpy_s(mons[k].s, "◁");
+					break;
+				case 2:
+					mons[k].color = 2;
+					strcpy_s(mons[k].m, "☆");
+					strcpy_s(mons[k].s, "▶");
+					break;
+				case 3:
+					mons[k].color = 3;
+					strcpy_s(mons[k].m, "◎");
+					strcpy_s(mons[k].s, "■");
+					break;
+				case 4:
+					mons[k].color = 4;
+					strcpy_s(mons[k].m, "△");
+					strcpy_s(mons[k].s, "■");
+					break;
+				}
+				
+				switch (rand2%4+1) {
+				case 1:
+					mons[k].Y = 19;
+					break;
+				case 2:
+					mons[k].Y = 11;
+					break;
+				case 3:
+					mons[k].Y = 15;
+					break;
+				case 4:
+					mons[k].Y = 7;
+					break;
+				}
+				rand2++;
+				mons[k].print();
+				k++;
+				mons[k].M_startTime = GetTickCount();
+			}
+
+		}
+		if (k == 10) { // 게임 종료
+			int temp = 0;
+			for (int h = 0; h < k; h++) {
+				if (mons[h].cnt == 0) temp++;
+			}
+			if (temp == 10) {
+				k = 0;
+				M_CreateTime -= 100;
+			}
+		}
+	}
+}
+void drawUI(int* x, int* y) {
+	setColor(white, black);
+	gotoxy(10, 25);
+	printf("위 치 : %02d, %02d", *x, *y);
+}
