@@ -1,0 +1,27 @@
+#pragma once
+#ifndef __STDIO_H__
+#define __STDIO_H__
+#include <stdio.h>
+#endif // !__STDIO_H__
+
+#ifndef __WINDOWS_H__
+#define __WINDOWS_H__
+#include <windows.h>
+#endif
+
+#include <iostream>
+#include <conio.h>
+
+#include<string>
+#include<my_global.h>
+#include <mysql.h>
+#pragma comment(lib, "libmySQL.lib")
+
+int keyControl();
+void drawMap();
+void init();
+void gotoxy(int, int);
+void titleDraw();
+int menuDraw();
+void infoDraw();
+void infoDraw2();
