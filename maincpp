@@ -1,0 +1,43 @@
+#include "main.h"
+#include "util.h"
+#include "game.h"
+using namespace std;
+
+
+int main(void) {
+
+	MYSQL mysql;
+	mysql_init(&mysql);
+	if (!mysql_real_connect(&mysql, "localhost", "root", "**본인db비밀번호**", "**본인db이름**", 3006, NULL, 0))
+		cout << "error";
+	else
+		cout << "success";
+	mysql_close(&mysql);
+/*	init();
+	while (1) {
+		titleDraw();
+		int menuCode = menuDraw();
+		if (menuCode == 0) {
+			gLoop();
+		}
+		else if (menuCode == 1) {
+			system("cls");
+			infoDraw();
+		}
+		else if (menuCode == 2) {
+			system("cls");
+			cout << "프로그램을 종료합니다." << endl;
+			return 0;
+		}
+		system("cls");
+		setColor(white, black);
+	}*/
+	return 0;
+}
+
+
+
+
+
+
+
