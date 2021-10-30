@@ -1,0 +1,84 @@
+#include "sqlmy.h"
+using namespace std;
+
+void MyS::login() {
+	system("cls");
+	cout << endl << endl << endl << endl << endl << endl << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                              당신의 닉네임을 정해주세요. (3자리 이내)                                |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                               ---------------------------------------------------------                              |" << endl;
+	cout << "      |                               |     닉네임  :                                         |                              |" << endl;
+	cout << "      |                               ---------------------------------------------------------                              |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                              ** 한글 입력 시 한영키를 한번 더 눌러 영타가 되게 해주세요 **                           |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                       > 엔터를 누르면 게임이 시작됩니다 <            |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+	char na[30];
+	gotoxy(54, 15);
+	cin >> na;
+	name = new char(strlen(na));
+	name = na;
+}
+
+void MyS::mysqlStart() {
+
+	strcpy(start,"INSERT INTO rtest1 (name, jumsu) VALUES('");
+	strcpy(insert, "SELECT name, jumsu, (@rank := @rank + 1) AS rank FROM rtest1 AS a, (SELECT @rank := 0) AS b ORDER BY a.jumsu DESC");
+	
+
+	mysql_init(&Conn); // MYSQL 정보 초기화
+
+	//데이터데이스와 연결
+	ConnPtr = mysql_real_connect(&Conn, DB_HOST, DB_USER, DB_PASS, "r_test", 3306, (char*)NULL, 0);
+
+	//연결 결과 확인, NULL일 경우 연결 실패한 것 
+	if (ConnPtr == NULL) {
+		fprintf(stderr, "Mysql connection error : %s", mysql_error(&Conn));
+	
+	}
+
+	mysql_query(ConnPtr, "set session character_set_connection=euuckr;"); // 한글 가능 설정
+	mysql_query(ConnPtr, "set session character_set_results=euuckr;");
+	mysql_query(ConnPtr, "set session character_set_client=euuckr;");
+
+	//const char* Query = "SELECT * FROM rtest1"; // 세미콜론을 제외하고 쿼리문 작성
+	//char QQ[50] = "SELECT * FROM rt";
+	//const char* Q1 = "est1";
+	//strcat(QQ, "est1");
+	
+}
+
+void MyS::setting() {
+	strcat(start, name);
+	strcat(start, "', '");
+	strcat(start, (char*)jumsu);
+	strcat(start, "')");
+
+	Stat = mysql_query(ConnPtr, start);
+}
+
+void MyS::show() {
+	system("cls");
+	Stat = mysql_query(ConnPtr, insert); // 쿼리 요청 및 성공여부 받아오기
+	if (Stat != 0) { // 쿼리 요청 실패 시 예외처리
+		fprintf(stderr, "Mysql query error : %s\n", mysql_error(&Conn));
+	}
+
+	Result = mysql_store_result(ConnPtr); // 결과 확인하기
+	while ((Row = mysql_fetch_row(Result)) != NULL) { //결과 출력하기
+		printf("%s %s \n", Row[0], Row[1]);
+	}
+	mysql_free_result(Result); // 결과 비우기
+	// 데이터베이스와 연결해제
+	mysql_close(ConnPtr);
+}
