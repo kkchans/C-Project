@@ -1,24 +1,24 @@
+#pragma once
+
 #include "main.h"
 #include "util.h"
 #include "game.h"
+#include "sqlmy.h"
 using namespace std;
 
 
 int main(void) {
-
-	MYSQL mysql;
-	mysql_init(&mysql);
-	if (!mysql_real_connect(&mysql, "localhost", "root", "**본인db비밀번호**", "**본인db이름**", 3006, NULL, 0))
-		cout << "error";
-	else
-		cout << "success";
-	mysql_close(&mysql);
-/*	init();
+	MyS s;
+	s.mysqlStart();
+	init();
 	while (1) {
 		titleDraw();
 		int menuCode = menuDraw();
 		if (menuCode == 0) {
-			gLoop();
+			s.login();
+			s.jumsu = gLoop();
+			s.setting();
+			s.show();
 		}
 		else if (menuCode == 1) {
 			system("cls");
@@ -31,7 +31,8 @@ int main(void) {
 		}
 		system("cls");
 		setColor(white, black);
-	}*/
+	}
+	
 	return 0;
 }
 
