@@ -40,14 +40,14 @@ void infoDraw() {
 	cout << "      |                                                                                                                      |" << endl;
 	cout << "      |                        이 게임은 몰려오는 몬스터를 때려 처치해야 합니다.                                             |" << endl;
 	cout << "      |                        몬스터는 총 4종류가 나옵니다.                                                                 |" << endl;
-	cout << "      |                        몬스터 마다 각각 맞춰야 하는 키가 다릅니다.                                                   |" << endl;
+	cout << "      |                        몬스터 마다 각각 맞춰야 하는 키가 다르며, 각 총알의 색깔과 같은 몬스터를 죽이면 됩니다.       |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
-	cout << "      |                        1.                          2.                                                                |" << endl;
-	cout << "      |                                          -- ↑키                    -- ↓키                                          |" << endl;
+	cout << "      |                        1.  파랑 총알                        2.  빨강 총알                                            |" << endl;
+	cout << "      |                                          -- ↑키                               -- ↓키                               |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
-	cout << "      |                       3.                           4.                                                                |" << endl;
-	cout << "      |                                          -- ←키                    -- →키                                          |" << endl;
+	cout << "      |                        3.  분홍 총알                        4.  연두 총알                                            |" << endl;
+	cout << "      |                                          -- ←키                               -- →키                               |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
 	cout << "      |                                                                 > 스페이스 바를 누르면 다음 장으로 넘어갑니다 <      |" << endl;
@@ -61,21 +61,21 @@ void infoDraw() {
 	cout << "◁";
 
 	setColor(red, black);
-	gotoxy(67, 15);
+	gotoxy(75, 15);
 	cout << "☆";
-	gotoxy(67, 16);
+	gotoxy(75, 16);
 	cout << "▶";
 
 	setColor(lightpurple, black);
-	gotoxy(38, 18);
-	cout << "◎";
 	gotoxy(38, 19);
+	cout << "◎";
+	gotoxy(38, 20);
 	cout << "■";
 
 	setColor(lightgreen, black);
-	gotoxy(67, 18);
+	gotoxy(75, 19);
 	cout << "△";
-	gotoxy(67, 19);
+	gotoxy(75, 20);
 	cout << "■";
 	setColor(white, black);
 
@@ -94,8 +94,8 @@ void infoDraw2() {
 	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
 	cout << "      |                                                     [조작 방법]                                                      |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
-	cout << "      |                        플레이어는 총을 쏘아 죽여야 합니다.                                                           |" << endl;
-	cout << "      |                        방향키 w s 키를 이용해 위 아래로 움직일 수 있습니다.                                          |" << endl;
+	cout << "      |                        플레이어는 방향키 w s 키를 이용해 위 아래로 움직일 수 있습니다.                               |" << endl;
+	cout << "      |                        플레이어의 현재 위치는 하단에 있습니다.                                                       |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
@@ -104,8 +104,8 @@ void infoDraw2() {
 	cout << "      |                        게이지는 남은 총알 수를 보여줍니다.                                                           |" << endl;
 	cout << "      |                        [=====]                                                                                       |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
-	cout << "      |                       일정 점수를 획득하면 다음 스테이지로 넘어갑니다.                                               |" << endl;
-	cout << "      |                       스테이지가 올라갈 수록 몬스터는 더 단단해집니다.                                               |" << endl;
+	cout << "      |                       10마리의 몬스터를 잡을 때마다 레벨은 올라갑니다.                                               |" << endl;
+	cout << "      |                       레벨이 올라갈수록 몬스터의 생성 속도는 빨라집니다.                                             |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
 	cout << "      |                                                                 > 스페이스 바를 누르면 메인 화면으로 넘어갑니다 <    |" << endl;
 	cout << "      |                                                                                                                      |" << endl;
@@ -286,7 +286,7 @@ void move(int* x, int* y, int _x, int _y) {
 
 }
 
-class Shot {
+class Shot { // 총알 클래스
 public:
 	int X; // 가로
 	int Y; // 세로 
@@ -306,7 +306,7 @@ public:
 
 };
 
-class Monster {
+class Monster { // 몬스터 클래스
 public:
 	char m[3];
 	char s[3]; // 몬스터 그림
@@ -347,6 +347,7 @@ int gLoop() {
 	int x, y;
 	int playing = 1;
 	int M_CreateTime = 2000;
+	int level = 1;
 	memcpy(tempMap, map, sizeof(tempMap));
 
 	drawMap(&x, &y);
@@ -378,6 +379,9 @@ int gLoop() {
 		shot_bar = 0;
 		gotoxy(40, 4);
 		cout << "점수 : " << score;
+		gotoxy(60, 4);
+		cout << "레벨 : " << level;
+		
 		for (int i = 0; i < 5; i++) { // 총알 움직임 구현
 			if (shot[i].cnt == 1) {
 				DWORD currentTime = GetTickCount();
@@ -434,9 +438,6 @@ int gLoop() {
 		case DOWN:
 			move(&x, &y, 0, 1);
 			break;
-		case SUBMIT:
-			playing = 0;
-			break;
 		default: 
 			if (key != 5 && key != 6 && key != 7 && key != 8) break; // 총 생성 
 			for (int i = 0; i < 5; i++) {
@@ -478,7 +479,10 @@ int gLoop() {
 					mons[i].M_startTime = GetTickCount();
 					if (mons[i].X - mons[i].i == 15) {
 						mons[i].cnt = 0;
-						cout << "종료합니다" << mons[i].X << "  " << mons[i].i;
+						gotoxy(60, 30);
+						cout << "!!! 게임오버 !!!";
+						gotoxy(58, 31);
+						cout << "랭킹으로 이동합니다";
 						Sleep(3000);
 						for (int cc = 0; cc < 20; cc++) {
 							mons[cc].cnt = 0;
@@ -546,7 +550,8 @@ int gLoop() {
 			}
 			if (temp == 10) {
 				k = 0;
-				M_CreateTime -= 100;
+				M_CreateTime -= 200;
+				level++;
 			}
 		}
 	}
