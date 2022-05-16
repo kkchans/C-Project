@@ -1,12 +1,12 @@
 #pragma once
 #include "main.h"
-
+#include "game.h"
 
 #define DB_HOST "127.0.0.1"
 #define DB_USER "root"
 #define DB_PASS "0228"
 #define DB_POTO 3306
-
+#define SUBMIT 4 // 선택 (스페이스바)
 class MyS {
 public:
 	char start[500];
@@ -17,11 +17,7 @@ public:
 	void mysqlStart();
 	void setting();
 	void show();
-	MYSQL Conn; // MYSQL 정보를 담을 구조체
-	MYSQL* ConnPtr = NULL; // MYSQL 핸들
-	MYSQL_RES* Result; // 쿼리 성공시 결과를 담는 구조체포인터
-	MYSQL_ROW Row; // 쿼리 성공시 결과로 나온 행의 정보를 담는 구조체
-	int Stat; // 쿼리 요청 후 결과(성공 실패)'
+	
 };
 
 
