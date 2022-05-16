@@ -28,28 +28,18 @@ void MyS::login() {
 	cin >> na;
 	name = new char(strlen(na));
 	name = na;
+	strcpy(start, "INSERT INTO mons (name, score) VALUES('");
+	strcat(start, name);
+	
 }
 
 void MyS::mysqlStart() {
 
-	strcpy(start,"INSERT INTO rtest1 (name, jumsu) VALUES('");
-	strcpy(insert, "SELECT name, jumsu, (@rank := @rank + 1) AS rank FROM rtest1 AS a, (SELECT @rank := 0) AS b ORDER BY a.jumsu DESC");
+	//strcpy(start,"INSERT INTO mons (name, score) VALUES('");
+	strcpy(insert, "SELECT name, score, (@rank := @rank + 1) AS rank FROM mons AS a, (SELECT @rank := 0) AS b ORDER BY a.score DESC limit 10");
 	
 
-	mysql_init(&Conn); // MYSQL 정보 초기화
-
-	//데이터데이스와 연결
-	ConnPtr = mysql_real_connect(&Conn, DB_HOST, DB_USER, DB_PASS, "r_test", 3306, (char*)NULL, 0);
-
-	//연결 결과 확인, NULL일 경우 연결 실패한 것 
-	if (ConnPtr == NULL) {
-		fprintf(stderr, "Mysql connection error : %s", mysql_error(&Conn));
 	
-	}
-
-	mysql_query(ConnPtr, "set session character_set_connection=euuckr;"); // 한글 가능 설정
-	mysql_query(ConnPtr, "set session character_set_results=euuckr;");
-	mysql_query(ConnPtr, "set session character_set_client=euuckr;");
 
 	//const char* Query = "SELECT * FROM rtest1"; // 세미콜론을 제외하고 쿼리문 작성
 	//char QQ[50] = "SELECT * FROM rt";
@@ -59,26 +49,117 @@ void MyS::mysqlStart() {
 }
 
 void MyS::setting() {
-	strcat(start, name);
+
+	MYSQL Conn; // MYSQL 정보를 담을 구조체
+	MYSQL* ConnPtr = NULL; // MYSQL 핸들
+	MYSQL_RES* Result; // 쿼리 성공시 결과를 담는 구조체포인터
+	MYSQL_ROW Row; // 쿼리 성공시 결과로 나온 행의 정보를 담는 구조체
+	int Stat; // 쿼리 요청 후 결과(성공 실패)'
+
+	mysql_init(&Conn); // MYSQL 정보 초기화
+
+	//데이터데이스와 연결
+	ConnPtr = mysql_real_connect(&Conn, DB_HOST, DB_USER, DB_PASS, "mons_ranking", 3306, (char*)NULL, 0);
+
+	//연결 결과 확인, NULL일 경우 연결 실패한 것 
+	if (ConnPtr == NULL) {
+		fprintf(stderr, "Mysql connection error : %s", mysql_error(&Conn));
+
+	}
+
+	mysql_query(ConnPtr, "set session character_set_connection=euuckr;"); // 한글 가능 설정
+	mysql_query(ConnPtr, "set session character_set_results=euuckr;");
+	mysql_query(ConnPtr, "set session character_set_client=euuckr;");
+
+	string tmp = to_string(jumsu);
+	char const *jumsu2 = tmp.c_str();
+	
 	strcat(start, "', '");
-	strcat(start, (char*)jumsu);
+	strcat(start, jumsu2);
 	strcat(start, "')");
 
-	Stat = mysql_query(ConnPtr, start);
+	mysql_query(ConnPtr, start);
+	mysql_store_result(ConnPtr);
 }
 
 void MyS::show() {
 	system("cls");
-	Stat = mysql_query(ConnPtr, insert); // 쿼리 요청 및 성공여부 받아오기
-	if (Stat != 0) { // 쿼리 요청 실패 시 예외처리
-		fprintf(stderr, "Mysql query error : %s\n", mysql_error(&Conn));
+
+	MYSQL Conn1; // MYSQL 정보를 담을 구조체
+	MYSQL* ConnPtr1 = NULL; // MYSQL 핸들
+	MYSQL_RES* Result1; // 쿼리 성공시 결과를 담는 구조체포인터
+	MYSQL_ROW Row1; // 쿼리 성공시 결과로 나온 행의 정보를 담는 구조체
+	int Stat1; // 쿼리 요청 후 결과(성공 실패)'
+	int r_x = 53;
+	int r_y = 11;
+
+	mysql_init(&Conn1); // MYSQL 정보 초기화
+
+	//데이터데이스와 연결
+	ConnPtr1 = mysql_real_connect(&Conn1, DB_HOST, DB_USER, DB_PASS, "mons_ranking", 3306, (char*)NULL, 0);
+
+	//연결 결과 확인, NULL일 경우 연결 실패한 것 
+	if (ConnPtr1 == NULL) {
+		fprintf(stderr, "Mysql connection error : %s", mysql_error(&Conn1));
+
 	}
 
-	Result = mysql_store_result(ConnPtr); // 결과 확인하기
-	while ((Row = mysql_fetch_row(Result)) != NULL) { //결과 출력하기
-		printf("%s %s \n", Row[0], Row[1]);
+	mysql_query(ConnPtr1, "set session character_set_connection=euuckr;"); // 한글 가능 설정
+	mysql_query(ConnPtr1, "set session character_set_results=euuckr;");
+	mysql_query(ConnPtr1, "set session character_set_client=euuckr;");
+	Stat1 = mysql_query(ConnPtr1, insert); // 쿼리 요청 및 성공여부 받아오기
+	if (Stat1 != 0) { // 쿼리 요청 실패 시 예외처리
+		fprintf(stderr, "Mysql query error : %s\n", mysql_error(&Conn1));
 	}
-	mysql_free_result(Result); // 결과 비우기
+
+	Result1 = mysql_store_result(ConnPtr1); // 결과 확인하기
+
+	cout << endl << endl << endl << endl << endl << endl << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                       [ 랭 킹 ]                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      |                                                            > 스페이스 바를 누르면 메인 화면으로 넘어갑니다 <         |" << endl;
+	cout << "      |                                                                                                                      |" << endl;
+	cout << "      ------------------------------------------------------------------------------------------------------------------------" << endl;
+
+	while ((Row1 = mysql_fetch_row(Result1)) != NULL) { //결과 출력하기
+		if (r_y == 20) {
+			gotoxy(r_x, r_y);
+			printf("[   %s위 : %s", Row1[2], Row1[0]);
+		}
+		else {
+			gotoxy(r_x, r_y);
+			printf("[   %s위  : %s", Row1[2], Row1[0]);
+		}
+		gotoxy(r_x + 20, r_y);
+		printf("%s점", Row1[1]);
+		gotoxy(r_x + 23, r_y);
+		printf("   ]\n");
+		r_y++;
+	}
+
+	
+	while (1) {
+		if (keyControl() == SUBMIT) {
+			
+			break;
+
+		}
+	}
+//	Sleep(3000);
+	mysql_free_result(Result1); // 결과 비우기
 	// 데이터베이스와 연결해제
-	mysql_close(ConnPtr);
+	mysql_close(ConnPtr1);
 }
